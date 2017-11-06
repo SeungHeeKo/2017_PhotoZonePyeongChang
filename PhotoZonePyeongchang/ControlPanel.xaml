@@ -1,0 +1,52 @@
+﻿<Window x:Class="PhotoZonePyeongchang.ControlPanel"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PhotoZonePyeongchang"
+        mc:Ignorable="d"
+        Title="ControlPanel"
+        Width="1381"
+        Height="925">
+    <Grid>
+        <StackPanel x:Name="ColorControlPanel" Height="287" Width="300" Margin="1071,0,2,607" VerticalAlignment="Center">
+            <DockPanel VerticalAlignment="Center" Margin="10">
+                <Label DockPanel.Dock="Left" FontWeight="Bold">R Low :</Label>
+                <TextBox Text="{Binding ElementName=slColorR_L, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Maximum="255" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" Name="slColorR_L" ValueChanged="ColorSlider_ValueChanged" />
+            </DockPanel>
+
+            <DockPanel VerticalAlignment="Center" Margin="10">
+                <Label DockPanel.Dock="Left" FontWeight="Bold">R High:</Label>
+                <TextBox Text="{Binding ElementName=slColorR_H, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Maximum="255" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" Name="slColorR_H" ValueChanged="ColorSlider_ValueChanged" />
+            </DockPanel>
+
+            <DockPanel VerticalAlignment="Center" Margin="10">
+                <Label DockPanel.Dock="Left" FontWeight="Bold">G Low :</Label>
+                <TextBox Text="{Binding ElementName=slColorG_L, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Maximum="255" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" Name="slColorG_L" ValueChanged="ColorSlider_ValueChanged" />
+            </DockPanel>
+
+            <DockPanel VerticalAlignment="Center" Margin="10">
+                <Label DockPanel.Dock="Left" FontWeight="Bold">G High:</Label>
+                <TextBox Text="{Binding ElementName=slColorG_H, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Maximum="255" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" Name="slColorG_H" ValueChanged="ColorSlider_ValueChanged" />
+            </DockPanel>
+
+            <DockPanel VerticalAlignment="Center" Margin="10">
+                <Label DockPanel.Dock="Left" FontWeight="Bold">B Low :</Label>
+                <TextBox Text="{Binding ElementName=slColorB_L, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Maximum="255" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" Name="slColorB_L" ValueChanged="ColorSlider_ValueChanged" />
+            </DockPanel>
+
+            <DockPanel VerticalAlignment="Center" Margin="10">
+                <Label DockPanel.Dock="Left" FontWeight="Bold">B High:</Label>
+                <TextBox Text="{Binding ElementName=slColorB_H, Path=Value, UpdateSourceTrigger=PropertyChanged}" DockPanel.Dock="Right" TextAlignment="Right" Width="40" />
+                <Slider Maximum="255" TickPlacement="BottomRight" TickFrequency="5" IsSnapToTickEnabled="True" Name="slColorB_H" ValueChanged="ColorSlider_ValueChanged" />
+            </DockPanel>
+        </StackPanel>
+
+        <Image x:Name="img_capture" Margin="45,46,330,110" />
+    </Grid>
+</Window>
