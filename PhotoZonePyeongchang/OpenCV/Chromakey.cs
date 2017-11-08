@@ -31,26 +31,26 @@ namespace PhotoZonePyeongchang.OpenCV
         double blue_l, blue_h;
 
         public Image<Bgr, byte> dst;
-
-        ControlPanel controlPanel = new ControlPanel();
+        
         ImageConverter imageConverter = new ImageConverter();
 
-        public void getColorMinMax()
+        public Chromakey()
         {
-            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
-            {
-                //controlPanel = new ControlPanel();
 
-                red_l = controlPanel.getRedValue_Low();
-                red_h = controlPanel.getRedValue_High();
-
-                green_l = controlPanel.getGreenValue_Low();
-                green_h = controlPanel.getGreenValue_High();
-
-                blue_l = controlPanel.getBlueValue_Low();
-                blue_h = controlPanel.getBlueValue_High();
-            }));
         }
+
+        public Chromakey(int redLow, int redHigh, int greenLow, int greenHigh, int blueLow, int blueHigh)
+        {
+            red_l = redLow;
+            red_h = redHigh;
+
+            green_l = greenLow;
+            green_h = greenHigh;
+
+            blue_l = blueLow;
+            blue_h = blueHigh;
+        }
+        
         //public void getMaskImage(Image<Bgr, byte> over) // over : webcam image
         //{
         //    Image<Gray, byte> mask = new Image<Gray, byte>(over.Size);   // Scalar(100, 200, 185)    , OpenCvSharp.Scalar color
@@ -72,10 +72,27 @@ namespace PhotoZonePyeongchang.OpenCV
         //    }
         //    mask.Erode(1);
         //}
+        
+        public void SetChromakeyColor(int redLow, int redHigh, int greenLow, int greenHigh, int blueLow, int blueHigh)
+        {
+            red_l = redLow;
+            red_h = redHigh;
 
+            green_l = greenLow;
+            green_h = greenHigh;
+
+            blue_l = blueLow;
+            blue_h = blueHigh;
+
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="background"></param>
+        /// <param name="original"></param>
         public void applyChromakey(Image<Bgr, byte> background, Image<Bgr, byte> original)   // original : webcam
         {
-            getColorMinMax();
+            
             dst = new Image<Bgr, byte>(background.Size);
 
             // chromakey_mask
@@ -118,11 +135,11 @@ namespace PhotoZonePyeongchang.OpenCV
                 }
             }
 
-            //Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(delegate
+            //Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate
             //{
-                ((MainWindow)System.Windows.Application.Current.MainWindow).img_webcam.Source = imageConverter.BitmapToImageSource(dst.Bitmap);
+                //((MainWindow)System.Windows.Application.Current.MainWindow).img_webcam.Source = imageConverter.BitmapToImageSource(dst.Bitmap);
             //}));
-
+            
 
         }
     }

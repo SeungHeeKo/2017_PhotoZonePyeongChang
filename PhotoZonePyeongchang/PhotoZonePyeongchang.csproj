@@ -237,6 +237,9 @@
     <Content Include="opencv_videostab2410.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Resources\bg_1920.jpeg" />
+    <Resource Include="Resources\bg_pc_640.jpg" />
+    <Resource Include="Resources\bg_pc.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

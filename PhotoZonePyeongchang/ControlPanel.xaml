@@ -6,9 +6,10 @@
         xmlns:local="clr-namespace:PhotoZonePyeongchang"
         mc:Ignorable="d"
         Title="ControlPanel"
-        Width="1381"
-        Height="925">
+        Width="1936"
+        Height="1056">
     <Grid>
+        <!-- -->
         <StackPanel x:Name="ColorControlPanel" Height="287" Width="300" Margin="1071,0,2,607" VerticalAlignment="Center">
             <DockPanel VerticalAlignment="Center" Margin="10">
                 <Label DockPanel.Dock="Left" FontWeight="Bold">R Low :</Label>
@@ -47,6 +48,8 @@
             </DockPanel>
         </StackPanel>
 
-        <Image x:Name="img_capture" Margin="45,46,330,110" />
+
+        <Image Width="1280" Height="720" x:Name="img_capture" Margin="38,32,610,273" MouseLeftButtonUp="img_capture_MouseLeftButtonUp"/>
+        <TextBox x:Name="textBox_Pixel" FontSize="25" HorizontalAlignment="Left" Height="150" Margin="1348,352,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="300"/>
     </Grid>
 </Window>

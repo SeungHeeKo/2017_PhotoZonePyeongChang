@@ -7,11 +7,11 @@
         mc:Ignorable="d"
         Background="#282828"
         Title="Tektonspace"
-        Width="1381"
-        Height="925"
+        Width="1936"
+        Height="1056"
         Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
-        <Image x:Name="img_webcam" Width="1280" Height="720" Margin="45,46,48,128" >
+        <Image x:Name="img_webcam" Width="1920" Height="1080" Margin="-2,0,10,-55" >
             <!--<Image.Clip>
                 <EllipseGeometry  RadiusX="240" RadiusY="240">
                     <EllipseGeometry.Center>
@@ -20,7 +20,7 @@
                 </EllipseGeometry>
             </Image.Clip>-->
         </Image>
-        <Button x:Name="button_capture" Content="촬영" HorizontalAlignment="Left" Margin="1148,804,0,0" VerticalAlignment="Top" Width="215" Height="80" Click="button_capture_Click"/>
+        <Button x:Name="button_capture" Content="촬영" HorizontalAlignment="Left" Margin="1713,935,0,0" VerticalAlignment="Top" Width="215" Height="80" Click="button_capture_Click"/>
         <!--<TextBox x:Name="textBox" FontSize="25" HorizontalAlignment="Left" Height="339" Margin="79,31,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="1229" Grid.ColumnSpan="5" Grid.Row="2" Grid.RowSpan="2"/>-->
     </Grid>
     <!--<Grid>

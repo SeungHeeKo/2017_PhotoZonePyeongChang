@@ -23,26 +23,43 @@ namespace PhotoZonePyeongchang
     public partial class ControlPanel : Window
     {
         public Image<Bgr, byte> originalImage;
-        //Chromakey chromakey = new Chromakey();
+        Chromakey chromakey = new Chromakey();
         ImageConverter imageConverter = new ImageConverter();
 
         public ControlPanel()
         {
             InitializeComponent();
             setRedValue_Low(0);
-            setRedValue_High(148);
-            setGreenValue_Low(180);
+            setRedValue_High(190);
+            setGreenValue_Low(155);
             setGreenValue_High(255);
             setBlueValue_Low(0);
-            setBlueValue_High(160);
+            setBlueValue_High(130);
+
+            if (backgroundImage == null || bgImg == null)
+                LoadResourceImage();
+
         }
+
+        Image<Bgr, byte> bgImg;
+        BitmapImage backgroundImage;
 
         public void SetCaptureImage(Image<Bgr, byte> frame)
         {
-            originalImage = frame;
-            img_capture.Source = imageConverter.BitmapToImageSource(originalImage.Bitmap);
+            if (backgroundImage == null || bgImg == null)
+                LoadResourceImage();
+            originalImage = frame.Clone();
+            SetChromakeyColor(getRedValue_Low(), getRedValue_High(), getGreenValue_Low(), getGreenValue_High(), getBlueValue_Low(), getBlueValue_High());
+            applyChromakey(bgImg, originalImage);
+            img_capture.Source = imageConverter.BitmapToImageSource(dst.Bitmap);
+
         }
 
+        private void LoadResourceImage()
+        {
+            backgroundImage = new BitmapImage(new Uri("Resources/bg_1920.jpeg", UriKind.Relative));
+            bgImg = new Image<Bgr, byte>(imageConverter.BitmapImage2Bitmap(backgroundImage));
+        }
         public byte getRedValue_Low()
         {
             return (byte)slColorR_L.Value;
@@ -102,7 +119,115 @@ namespace PhotoZonePyeongchang
             setBlueValue_Low(slColorB_L.Value);
             setBlueValue_High(slColorB_H.Value);
             ColorControlPanel.Background = new SolidColorBrush(color);
+            
+            SetChromakeyColor(getRedValue_Low(), getRedValue_High(), getGreenValue_Low(), getGreenValue_High(), getBlueValue_Low(), getBlueValue_High());
+
+            if (backgroundImage == null || bgImg == null)
+                LoadResourceImage();
+            if(originalImage == null)
+                return;
+            applyChromakey(bgImg, originalImage);
+            img_capture.Source = imageConverter.BitmapToImageSource(dst.Bitmap);
+        }
+
+
+
+
+
+
+        const int red_low_max = 255;
+        const int red_high_max = 255;
+        int red_low, red_high;
+        double red_l, red_h;
+
+        const int green_low_max = 255;
+        const int green_high_max = 255;
+        int green_low, green_high;
+        double green_l, green_h;
+
+        const int blue_low_max = 255;
+        const int blue_high_max = 255;
+        int blue_low, blue_high;
+
+        private void img_capture_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            Point pos = e.GetPosition(img_capture);
+            int y = Convert.ToInt32(pos.Y);
+            int x = Convert.ToInt32(pos.X);
+            
+            textBox_Pixel.Text = "R : " + originalImage.Data[y, x, 2].ToString();
+            textBox_Pixel.Text += "\nG : " + originalImage.Data[y, x, 1].ToString();
+            textBox_Pixel.Text += "\nB : " + originalImage.Data[y, x, 0].ToString();
+        }
+
+        double blue_l, blue_h;
+
+        public Image<Bgr, byte> dst;
+
+        public void SetChromakeyColor(int redLow, int redHigh, int greenLow, int greenHigh, int blueLow, int blueHigh)
+        {
+            red_l = redLow;
+            red_h = redHigh;
+
+            green_l = greenLow;
+            green_h = greenHigh;
+
+            blue_l = blueLow;
+            blue_h = blueHigh;
 
         }
+        public void applyChromakey(Image<Bgr, byte> background, Image<Bgr, byte> original)   // original : webcam
+        {
+
+            dst = new Image<Bgr, byte>(background.Size);
+
+            // chromakey_mask
+            Image<Gray, byte> mask = new Image<Gray, byte>(original.Size);   // Scalar(100, 200, 185)    , OpenCvSharp.Scalar color
+
+            for (int y = 0; y < original.Rows; y++)
+            {
+                for (int x = 0; x < original.Cols; x++)
+                {
+                    ////cout << "R : " << over.at<Vec3b>(y, x)[0] << "  G : " << over.at<Vec3b>(y, x)[1] << "  B : " << over.at<Vec3b>(y, x)[2] << std::endl;
+                    if (original.Data[y, x, 2] >= red_l && original.Data[y, x, 2] <= red_h && original.Data[y, x, 1] >= green_l && original.Data[y, x, 1] <= green_h && original.Data[y, x, 0] >= blue_l && original.Data[y, x, 0] <= blue_h)
+                    {
+                        mask.Data[y, x, 0] = 0;
+                    }
+                    else
+                    {
+                        mask.Data[y, x, 0] = 255;
+                    }
+                }
+            }
+            mask.Erode(2);
+
+            for (int y = 0; y < background.Rows; y++)
+            {
+                for (int x = 0; x < background.Cols; x++)
+                {
+                    ////cout << "R : " << over.at<Vec3b>(y, x)[0] << "  G : " << over.at<Vec3b>(y, x)[1] << "  B : " << over.at<Vec3b>(y, x)[2] << std::endl;
+                    if (mask.Data[y, x, 0] == 0)
+                    {
+                        dst.Data[y, x, 0] = background.Data[y, x, 0];
+                        dst.Data[y, x, 1] = background.Data[y, x, 1];
+                        dst.Data[y, x, 2] = background.Data[y, x, 2];
+                    }
+                    else
+                    {
+                        dst.Data[y, x, 0] = original.Data[y, x, 0];
+                        dst.Data[y, x, 1] = original.Data[y, x, 1];
+                        dst.Data[y, x, 2] = original.Data[y, x, 2];
+                    }
+                }
+            }
+
+            //Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, (ThreadStart)(delegate
+            //{
+            //    img_webcam.Source = imageConverter.BitmapToImageSource(dst.Bitmap);
+            //}));
+
+
+        }
+
     }
 }
